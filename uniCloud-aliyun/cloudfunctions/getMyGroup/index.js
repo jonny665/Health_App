@@ -1,6 +1,6 @@
-'use strict'
+"use strict";
 
-const db = uniCloud.database()
+const db = uniCloud.database();
 
 function resolveClientId(event, context) {
   return (
@@ -15,20 +15,35 @@ function resolveClientId(event, context) {
     context?.CLIENTINFO?.clientId ||
     context?.CLIENT_INFO?.clientId ||
     context?.CLIENTIP ||
-    'anonymous'
-  )
+    "anonymous"
+  );
 }
 
 exports.main = async (event, context) => {
-  const clientId = resolveClientId(event, context)
+  const clientId = resolveClientId(event, context);
   try {
-    if (!clientId) return { success: true, data: { groupId: '' } }
-    const res = await db.collection('form').where({ clientId }).limit(1).get()
-    const form = res.data && res.data[0]
-    if (!form) return { success: true, data: { groupId: '' } }
-    return { success: true, data: { groupId: form.groupId, isLeader: !!form.isLeader } }
+    const empty = {
+      groupId: "",
+      isLeader: false,
+      profile: { nickname: "", info: "" },
+    };
+    if (!clientId) return { success: true, data: empty };
+    const res = await db.collection("form").where({ clientId }).limit(1).get();
+    const form = res.data && res.data[0];
+    if (!form) return { success: true, data: empty };
+    return {
+      success: true,
+      data: {
+        groupId: form.groupId,
+        isLeader: !!form.isLeader,
+        profile: {
+          nickname: form.nickname || "",
+          info: form.info || "",
+        },
+      },
+    };
   } catch (err) {
-    console.error('getMyGroup error', err)
-    return { success: false, errorMessage: err.message || '云函数执行异常' }
+    console.error("getMyGroup error", err);
+    return { success: false, errorMessage: err.message || "云函数执行异常" };
   }
-}
+};

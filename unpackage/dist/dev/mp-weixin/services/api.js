@@ -5,18 +5,19 @@ function callApi({ api, data = {}, loading = false }) {
     common_vendor.index.showLoading({ title: "加载中" });
   return new Promise((resolve, reject) => {
     common_vendor.tr.callFunction({
-      name: "fun",
-      data: { api, args: data }
+      name: api,
+      data
     }).then((res) => {
-      var _a, _b;
       if (loading)
         common_vendor.index.hideLoading();
-      if (res.result && res.result.success) {
-        resolve(res.result.data);
-      } else {
-        common_vendor.index.showToast({ title: ((_a = res.result) == null ? void 0 : _a.errorMessage) || "错误", icon: "none" });
-        reject((_b = res.result) == null ? void 0 : _b.errorMessage);
+      const r = res.result;
+      if (r && typeof r === "object" && "success" in r) {
+        if (r.success)
+          return resolve(r.data);
+        common_vendor.index.showToast({ title: r.errorMessage || "错误", icon: "none" });
+        return reject(r.errorMessage);
       }
+      resolve(r);
     }).catch((err) => {
       if (loading)
         common_vendor.index.hideLoading();
@@ -40,6 +41,9 @@ const groupService = {
   },
   groupMembers(groupId) {
     return callApi({ api: "getManyForm", data: { groupId }, loading: true });
+  },
+  updateProfile(profile) {
+    return callApi({ api: "updateProfile", data: profile, loading: true });
   }
 };
 const messageService = {
