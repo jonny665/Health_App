@@ -10,6 +10,20 @@ const _sfc_main = {
     const form = common_vendor.reactive({ nickname: "", info: "" });
     const joinId = common_vendor.ref("");
     const joinNickname = common_vendor.ref("");
+    const myProfile = common_vendor.reactive({ nickname: "", info: "" });
+    const profileSaving = common_vendor.ref(false);
+    const applyProfile = (profile = {}) => {
+      const nickname = profile.nickname || "";
+      const info = profile.info || "";
+      myProfile.nickname = nickname;
+      myProfile.info = info;
+      if (!form.nickname)
+        form.nickname = nickname;
+      if (!form.info)
+        form.info = info;
+      if (!joinNickname.value)
+        joinNickname.value = nickname;
+    };
     const loadMembers = async () => {
       if (!groupId.value)
         return;
@@ -17,18 +31,19 @@ const _sfc_main = {
         const res = await services_api.groupService.groupMembers(groupId.value);
         members.value = res.userList || [];
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:52", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:77", e);
       }
     };
     const loadMyGroup = async () => {
       try {
         const res = await services_api.groupService.getMyGroup();
         groupId.value = res.groupId || "";
+        applyProfile(res.profile || {});
         if (groupId.value) {
           await loadMembers();
         }
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:64", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:90", e);
       }
     };
     const create = async () => {
@@ -42,9 +57,10 @@ const _sfc_main = {
           info: form.info
         });
         groupId.value = res.groupId;
+        applyProfile({ nickname: form.nickname, info: form.info });
         await loadMembers();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:81", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:108", e);
       }
     };
     const join = async () => {
@@ -63,9 +79,10 @@ const _sfc_main = {
           region: []
         });
         groupId.value = res.groupId;
+        applyProfile({ nickname: joinNickname.value, info: "" });
         await loadMembers();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:103", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:131", e);
       }
     };
     const list = async () => {
@@ -73,11 +90,35 @@ const _sfc_main = {
         const res = await services_api.groupService.listGroups();
         groups.value = res.groupList || [];
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:112", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:140", e);
       }
     };
     const quickJoin = (id) => {
       joinId.value = String(id);
+    };
+    const saveProfile = async () => {
+      if (!groupId.value) {
+        common_vendor.index.showToast({ title: "加入小组后可保存", icon: "none" });
+        return;
+      }
+      if (!myProfile.nickname) {
+        common_vendor.index.showToast({ title: "请输入昵称", icon: "none" });
+        return;
+      }
+      try {
+        profileSaving.value = true;
+        const res = await services_api.groupService.updateProfile({
+          nickname: myProfile.nickname,
+          info: myProfile.info
+        });
+        applyProfile(res || {});
+        common_vendor.index.showToast({ title: "已更新", icon: "success" });
+        await loadMembers();
+      } catch (e) {
+        common_vendor.index.__f__("error", "at pages/group/group.vue:167", e);
+      } finally {
+        profileSaving.value = false;
+      }
     };
     common_vendor.onShow(loadMyGroup);
     return (_ctx, _cache) => {
@@ -100,13 +141,22 @@ const _sfc_main = {
           };
         })
       }, {
-        j: joinId.value,
-        k: common_vendor.o(($event) => joinId.value = $event.detail.value),
-        l: joinNickname.value,
-        m: common_vendor.o(($event) => joinNickname.value = $event.detail.value),
-        n: common_vendor.o(join),
-        o: common_vendor.o(list),
-        p: common_vendor.f(groups.value, (g, k0, i0) => {
+        j: myProfile.nickname,
+        k: common_vendor.o(($event) => myProfile.nickname = $event.detail.value),
+        l: myProfile.info,
+        m: common_vendor.o(($event) => myProfile.info = $event.detail.value),
+        n: common_vendor.t(profileSaving.value ? "保存中..." : "保存资料"),
+        o: !groupId.value || profileSaving.value,
+        p: common_vendor.o(saveProfile),
+        q: !groupId.value
+      }, !groupId.value ? {} : {}, {
+        r: joinId.value,
+        s: common_vendor.o(($event) => joinId.value = $event.detail.value),
+        t: joinNickname.value,
+        v: common_vendor.o(($event) => joinNickname.value = $event.detail.value),
+        w: common_vendor.o(join),
+        x: common_vendor.o(list),
+        y: common_vendor.f(groups.value, (g, k0, i0) => {
           return {
             a: common_vendor.t(g.groupId),
             b: common_vendor.t(g.leader),
