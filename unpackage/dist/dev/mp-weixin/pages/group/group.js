@@ -31,7 +31,7 @@ const _sfc_main = {
         const res = await services_api.groupService.groupMembers(groupId.value);
         members.value = res.userList || [];
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:77", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:90", e);
       }
     };
     const loadMyGroup = async () => {
@@ -43,7 +43,7 @@ const _sfc_main = {
           await loadMembers();
         }
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:90", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:103", e);
       }
     };
     const create = async () => {
@@ -60,7 +60,7 @@ const _sfc_main = {
         applyProfile({ nickname: form.nickname, info: form.info });
         await loadMembers();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:108", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:121", e);
       }
     };
     const join = async () => {
@@ -82,7 +82,7 @@ const _sfc_main = {
         applyProfile({ nickname: joinNickname.value, info: "" });
         await loadMembers();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:131", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:144", e);
       }
     };
     const list = async () => {
@@ -90,7 +90,7 @@ const _sfc_main = {
         const res = await services_api.groupService.listGroups();
         groups.value = res.groupList || [];
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:140", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:153", e);
       }
     };
     const quickJoin = (id) => {
@@ -115,7 +115,7 @@ const _sfc_main = {
         common_vendor.index.showToast({ title: "已更新", icon: "success" });
         await loadMembers();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/group/group.vue:167", e);
+        common_vendor.index.__f__("error", "at pages/group/group.vue:180", e);
       } finally {
         profileSaving.value = false;
       }
@@ -130,33 +130,37 @@ const _sfc_main = {
         d: form.info,
         e: common_vendor.o(($event) => form.info = $event.detail.value),
         f: common_vendor.o(create)
-      } : {
+      } : common_vendor.e({
         g: common_vendor.t(groupId.value),
         h: common_vendor.o(loadMembers),
-        i: common_vendor.f(members.value, (u, k0, i0) => {
+        i: members.value.length
+      }, members.value.length ? {
+        j: common_vendor.t(members.value.length)
+      } : {}, {
+        k: common_vendor.f(members.value, (u, k0, i0) => {
           return {
             a: common_vendor.t(u.nickname),
-            b: common_vendor.t(u.isLeader ? "(组长)" : ""),
+            b: common_vendor.t(u.isLeader ? "组长" : "成员"),
             c: u._id
           };
         })
-      }, {
-        j: myProfile.nickname,
-        k: common_vendor.o(($event) => myProfile.nickname = $event.detail.value),
-        l: myProfile.info,
-        m: common_vendor.o(($event) => myProfile.info = $event.detail.value),
-        n: common_vendor.t(profileSaving.value ? "保存中..." : "保存资料"),
-        o: !groupId.value || profileSaving.value,
-        p: common_vendor.o(saveProfile),
-        q: !groupId.value
+      }), {
+        l: myProfile.nickname,
+        m: common_vendor.o(($event) => myProfile.nickname = $event.detail.value),
+        n: myProfile.info,
+        o: common_vendor.o(($event) => myProfile.info = $event.detail.value),
+        p: common_vendor.t(profileSaving.value ? "保存中..." : "保存资料"),
+        q: !groupId.value || profileSaving.value,
+        r: common_vendor.o(saveProfile),
+        s: !groupId.value
       }, !groupId.value ? {} : {}, {
-        r: joinId.value,
-        s: common_vendor.o(($event) => joinId.value = $event.detail.value),
-        t: joinNickname.value,
-        v: common_vendor.o(($event) => joinNickname.value = $event.detail.value),
-        w: common_vendor.o(join),
-        x: common_vendor.o(list),
-        y: common_vendor.f(groups.value, (g, k0, i0) => {
+        t: joinId.value,
+        v: common_vendor.o(($event) => joinId.value = $event.detail.value),
+        w: joinNickname.value,
+        x: common_vendor.o(($event) => joinNickname.value = $event.detail.value),
+        y: common_vendor.o(join),
+        z: common_vendor.o(list),
+        A: common_vendor.f(groups.value, (g, k0, i0) => {
           return {
             a: common_vendor.t(g.groupId),
             b: common_vendor.t(g.leader),

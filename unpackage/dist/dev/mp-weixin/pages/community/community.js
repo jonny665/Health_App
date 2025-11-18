@@ -11,7 +11,7 @@ const _sfc_main = {
         const res = await services_api.messageService.listPublic();
         messages.value = res.messages || res.data || [];
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/community/community.vue:25", e);
+        common_vendor.index.__f__("error", "at pages/community/community.vue:32", e);
       }
     };
     const publish = async () => {
@@ -24,8 +24,16 @@ const _sfc_main = {
         content.value = "";
         await load();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/community/community.vue:39", e);
+        common_vendor.index.__f__("error", "at pages/community/community.vue:46", e);
       }
+    };
+    const formatTime = (ts) => {
+      if (!ts)
+        return "";
+      const date = new Date(ts);
+      return `${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${String(
+        date.getMinutes()
+      ).padStart(2, "0")}`;
     };
     common_vendor.onShow(load);
     return (_ctx, _cache) => {
@@ -36,7 +44,8 @@ const _sfc_main = {
         d: common_vendor.f(messages.value, (m, k0, i0) => {
           return {
             a: common_vendor.t(m.content),
-            b: m._id
+            b: common_vendor.t(formatTime(m.createdAt)),
+            c: m._id
           };
         })
       };

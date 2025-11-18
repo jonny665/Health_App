@@ -1,51 +1,59 @@
 <template>
-  <view class="p-3">
-    <view class="card">
-      <text>欢迎来到健康监控</text>
-      <view class="mt-2 text-muted">今日概览</view>
-      <view class="mt-2">摄入热量：{{ summary.diet }} kcal</view>
-      <view>消耗热量：{{ summary.sport }} kcal</view>
-  <view class="mt-2">小组：{{ groupId || '未加入' }}</view>
+  <!-- 父容器使用flex布局并占满全屏 -->
+  <view class="container pd20 column">
+    <!-- 顶部欢迎卡片 - 占满剩余空间 -->
+    <view class="card colorCard pd40 flex-grow">
+      <view class="fs40 fwb">欢迎来到健康监控</view>
+      <view class="mgt10 fs28">今日概览</view>
+      <view class="mgt20 fs32">摄入热量：{{ summary.diet }} kcal</view>
+      <view class="mgt10 fs32">消耗热量：{{ summary.sport }} kcal</view>
+      <view class="mgt10 fs28">小组：{{ groupId || "未加入" }}</view>
     </view>
-    <button class="mt-2" @click="toDiet">饮食记录</button>
-    <button class="mt-2" @click="toSport">运动记录</button>
-    <button class="mt-2" @click="toCommunity">社区</button>
-    <button class="mt-2" @click="toGroup">小组</button>
-    <button class="mt-2" @click="toReport">报告总结</button>
+
+    <!-- 快捷入口卡片 - 固定在底部 -->
+    <view class="card pd40 jcc column bottom-bar">
+      <view class="fs36 fwb mbg20">快捷入口</view>
+      <view class="flex jcsa">
+        <button class="fs28" @click="toDiet">饮食记录</button>
+        <button class="fs28" @click="toSport">运动记录</button>
+        <button class="fs28" @click="toCommunity">社区</button>
+        <button class="fs28" @click="toGroup">小组</button>
+        <button class="fs28" @click="toReport">报告总结</button>
+      </view>
+    </view>
   </view>
 </template>
-<script setup>
-import { reactive, ref } from 'vue'
-import { onShow } from '@dcloudio/uni-app'
-import { groupService, dietService, sportService } from '../../services/api.js'
 
-const summary = reactive({ diet: 0, sport: 0 })
-const groupId = ref('')
-
-const loadData = async () => {
-  const today = new Date().toISOString().slice(0, 10)
-  try {
-    const [diet, sport, g] = await Promise.all([
-      dietService.dailyDiet(today),
-      sportService.dailySport(today),
-      groupService.getMyGroup()
-    ])
-    summary.diet = (diet.records || []).reduce((s, i) => s + i.calories, 0)
-    summary.sport = (sport.records || []).reduce((s, i) => s + i.calories, 0)
-    groupId.value = g.groupId || ''
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-onShow(loadData)
-
-const toDiet = () => uni.navigateTo({ url: '/pages/diet/diet' })
-const toSport = () => uni.navigateTo({ url: '/pages/sport/sport' })
-const toCommunity = () => uni.navigateTo({ url: '/pages/community/community' })
-const toGroup = () => uni.navigateTo({ url: '/pages/group/group' })
-const toReport = () => uni.navigateTo({ url: '/pages/report/report' })
-</script>
 <style scoped>
-button{background:#1afa29;color:#fff;padding:16rpx;border-radius:8rpx;}
+  .container {
+    /* 用rpx设置全屏高度（根据常见设备屏幕比例，1334rpx约等于iPhone 6/7/8的全屏高度，可根据实际需求调整） */
+    height: 1334rpx;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-grow {
+    flex-grow: 1;
+    /* 自动填充剩余空间 */
+  }
+
+  .bottom-bar {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: auto;
+  }
+
+  button {
+    min-width: 140rpx;
+    text-align: center;
+    white-space: nowrap;
+    padding: 20rpx 0;
+  }
+
+  /* 确保页面根元素也没有滚动 */
+  page {
+    height: 100%;
+    overflow: hidden;
+  }
 </style>

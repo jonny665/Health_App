@@ -33,13 +33,13 @@ const _sfc_main = {
           const diet = await services_api.dietService.dailyDiet(d);
           dietTotal += (diet.records || []).reduce((s, i) => s + i.calories, 0);
         } catch (e) {
-          common_vendor.index.__f__("error", "at pages/report/report.vue:61", e);
+          common_vendor.index.__f__("error", "at pages/report/report.vue:65", e);
         }
         try {
           const sport = await services_api.sportService.dailySport(d);
           sportTotal += (sport.records || []).reduce((s, i) => s + i.calories, 0);
         } catch (e) {
-          common_vendor.index.__f__("error", "at pages/report/report.vue:67", e);
+          common_vendor.index.__f__("error", "at pages/report/report.vue:71", e);
         }
       }
       report.value = { totalDiet: dietTotal, totalSport: sportTotal };
@@ -56,15 +56,15 @@ const _sfc_main = {
         const aiRes = await services_api.reportService.aiSummary(generated.reportId);
         aiText.value = aiRes.text || "暂无AI返回";
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/report/report.vue:84", e);
+        common_vendor.index.__f__("error", "at pages/report/report.vue:88", e);
       }
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.t(start.value),
+        a: common_vendor.t(start.value || "请选择"),
         b: common_vendor.o(onStart),
         c: start.value,
-        d: common_vendor.t(end.value),
+        d: common_vendor.t(end.value || "请选择"),
         e: common_vendor.o(onEnd),
         f: end.value,
         g: common_vendor.o(generate),

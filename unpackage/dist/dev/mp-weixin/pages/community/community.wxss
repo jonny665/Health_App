@@ -1,3 +1,8 @@
 
-input.data-v-a6ef5318{border:1px solid #eee;padding:12rpx;border-radius:8rpx;margin-top:12rpx}
-button.data-v-a6ef5318{background:#1afa29;color:#fff;padding:16rpx;border-radius:8rpx;}
+.column.gap > .card + .card.data-v-a6ef5318 {
+  margin-top: 20rpx;
+}
+textarea.data-v-a6ef5318 {
+  width: 100%;
+  min-height: 120rpx;
+}

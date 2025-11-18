@@ -1,23 +1,35 @@
 <template>
-  <view class="p-3">
+  <view class="pd20 column gap">
     <view class="card" v-if="!groupId">
-      <input v-model="form.nickname" placeholder="昵称" />
-      <textarea v-model="form.info" placeholder="简介/目标" />
-      <button class="mt-2" @click="create">创建小组</button>
+      <input class="input" v-model="form.nickname" placeholder="昵称" />
+      <textarea
+        class="input"
+        v-model="form.info"
+        placeholder="简介/目标"
+      ></textarea>
+      <button class="mgt20" @click="create">创建小组</button>
     </view>
     <view class="card" v-else>
-      <view>当前小组：{{ groupId }}</view>
-      <button class="mt-2" @click="loadMembers">刷新成员</button>
-      <view class="mt-2" v-for="u in members" :key="u._id">
-        {{ u.nickname }} {{ u.isLeader ? "(组长)" : "" }}
+      <view class="fs32 fwb">当前小组 #{{ groupId }}</view>
+      <button class="mgt20" @click="loadMembers">刷新成员</button>
+      <view class="mgt10 c9" v-if="members.length"
+        >共 {{ members.length }} 人</view
+      >
+      <view class="mgt20" v-for="u in members" :key="u._id">
+        <view class="fs32">{{ u.nickname }}</view>
+        <view class="c9 fs24">{{ u.isLeader ? "组长" : "成员" }}</view>
       </view>
     </view>
-    <view class="card mt-2">
-      <view>我的资料</view>
-      <input v-model="myProfile.nickname" placeholder="昵称" />
-      <textarea v-model="myProfile.info" placeholder="个人简介" />
+    <view class="card">
+      <view class="fs32 fwb">我的资料</view>
+      <input class="input" v-model="myProfile.nickname" placeholder="昵称" />
+      <textarea
+        class="input"
+        v-model="myProfile.info"
+        placeholder="个人简介"
+      ></textarea>
       <button
-        class="mt-2"
+        class="mgt20"
         :disabled="!groupId || profileSaving"
         @click="saveProfile"
       >
@@ -25,16 +37,17 @@
       </button>
       <view class="tips" v-if="!groupId">加入或创建小组后可保存</view>
     </view>
-    <view class="card mt-2">
-      <view>加入已有小组</view>
-      <input v-model="joinId" placeholder="输入小组ID" />
-      <input v-model="joinNickname" placeholder="你的昵称" />
-      <button class="mt-2" @click="join">加入</button>
+    <view class="card">
+      <view class="fs32 fwb">加入已有小组</view>
+      <input class="input" v-model="joinId" placeholder="输入小组ID" />
+      <input class="input" v-model="joinNickname" placeholder="你的昵称" />
+      <button class="mgt20" @click="join">加入</button>
     </view>
-    <view class="card mt-2">
-      <button @click="list">获取可加入小组列表</button>
+    <view class="card">
+      <view class="fs32 fwb">可加入小组</view>
+      <button class="mgt20" @click="list">获取可加入小组列表</button>
       <view
-        class="mt-2"
+        class="mt-2 link"
         v-for="g in groups"
         :key="g.groupId"
         @click="quickJoin(g.groupId)"
@@ -173,20 +186,10 @@ const saveProfile = async () => {
 onShow(loadMyGroup);
 </script>
 <style scoped>
-input,
-textarea {
-  border: 1px solid #eee;
-  padding: 12rpx;
-  border-radius: 8rpx;
-  margin-top: 12rpx;
-  width: 100%;
+.column.gap > .card + .card {
+  margin-top: 20rpx;
 }
-button {
-  background: #1afa29;
-  color: #fff;
-  padding: 16rpx;
-  border-radius: 8rpx;
-}
+
 button:disabled {
   background: #9ed6a0;
   color: #f3f3f3;

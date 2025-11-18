@@ -16,7 +16,7 @@ const _sfc_main = {
         const res = await services_api.dietService.dailyDiet(today);
         list.value = res.records || [];
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/diet/diet.vue:35", e);
+        common_vendor.index.__f__("error", "at pages/diet/diet.vue:44", e);
       }
     };
     const addDiet = async () => {
@@ -34,7 +34,7 @@ const _sfc_main = {
         calories.value = 0;
         await load();
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/diet/diet.vue:54", e);
+        common_vendor.index.__f__("error", "at pages/diet/diet.vue:63", e);
       }
     };
     common_vendor.onShow(load);
@@ -52,7 +52,8 @@ const _sfc_main = {
           return {
             a: common_vendor.t(item.food),
             b: common_vendor.t(item.calories),
-            c: item._id
+            c: common_vendor.t(item.date),
+            d: item._id
           };
         })
       };

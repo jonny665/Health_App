@@ -1,17 +1,6 @@
 
-input.data-v-3945b5f1,
-textarea.data-v-3945b5f1 {
-  border: 1px solid #eee;
-  padding: 12rpx;
-  border-radius: 8rpx;
-  margin-top: 12rpx;
-  width: 100%;
-}
-button.data-v-3945b5f1 {
-  background: #1afa29;
-  color: #fff;
-  padding: 16rpx;
-  border-radius: 8rpx;
+.column.gap > .card + .card.data-v-3945b5f1 {
+  margin-top: 20rpx;
 }
 button.data-v-3945b5f1:disabled {
   background: #9ed6a0;
