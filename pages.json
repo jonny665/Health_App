@@ -6,10 +6,11 @@
         "navigationBarTitleText": "健康监控"
       }
     },
-    { 
-      "path": "pages/ai_analyse/ai_analyse", 
-      "style": { 
-        "navigationBarTitleText": "AI分析" } 
+    {
+      "path": "pages/ai_analyse/ai_analyse",
+      "style": {
+        "navigationBarTitleText": "AI分析"
+      }
     },
     {
       "path": "pages/login/login",

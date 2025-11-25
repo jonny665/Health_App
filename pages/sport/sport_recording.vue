@@ -67,9 +67,15 @@ const addSport = async () => {
 onShow(load);
 </script>
 <style scoped>
-.bg-dark { background-color: #1f2f50; }
-.text-white { color: #fff; }
-.fs-60 { font-size: 60rpx; }
+.bg-dark {
+  background-color: #1f2f50;
+}
+.text-white {
+  color: #fff;
+}
+.fs-60 {
+  font-size: 60rpx;
+}
 .input-field {
   height: 88rpx;
   background: #f8f9fb;

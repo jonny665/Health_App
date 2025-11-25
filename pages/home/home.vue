@@ -137,11 +137,9 @@ export default {
     }
     this.userOpenId = cachedProfile.openid;
 
+    // 页面加载时获取一次数据
     this.fetchTodayCalories();
-    this.initCalorieWatcher();
-
     this.fetchUserProfile();
-    this.initProfileWatcher();
   },
   onShow() {
     // 每次显示页面时刷新数据，确保从个人中心返回时数据同步
@@ -151,8 +149,7 @@ export default {
     }
   },
   onUnload() {
-    this.destroyCalorieWatcher();
-    this.destroyProfileWatcher();
+    // 无需销毁 watcher
   },
   methods: {
     async fetchTodayCalories() {
@@ -170,39 +167,7 @@ export default {
         console.error("[home] calorie fn error", err);
       }
     },
-    initCalorieWatcher() {
-      const { startISO, endISO } = this.getTodayRange();
-      this.destroyCalorieWatcher();
-      this.calorieWatcher = db
-        .collection("daily_calorie_logs")
-        .where(
-          dbCmd.and([
-            { userOpenId: this.userOpenId },
-            { consumedAt: dbCmd.gte(startISO) },
-            { consumedAt: dbCmd.lt(endISO) },
-          ])
-        )
-        .watch({
-          onChange: this.handleCalorieSnapshot,
-          onError: (err) => console.error("[home] calorie watch error", err),
-        });
-    },
-    handleCalorieSnapshot(snapshot) {
-      const total = snapshot.docs.reduce(
-        (sum, doc) => sum + Number(doc.calories || 0),
-        0
-      );
-      this.$set(this.cardGroups[0], 0, {
-        ...this.cardGroups[0][0],
-        value: total.toFixed(1),
-      });
-    },
-    destroyCalorieWatcher() {
-      if (this.calorieWatcher) {
-        this.calorieWatcher.close();
-        this.calorieWatcher = null;
-      }
-    },
+    // 移除高消耗的实时监听，改为按需拉取
     async fetchUserProfile() {
       if (!this.userOpenId) return;
       try {
@@ -215,20 +180,6 @@ export default {
       } catch (err) {
         console.error("[home] profile fn error", err);
       }
-    },
-    initProfileWatcher() {
-      if (!this.userOpenId) return;
-      this.destroyProfileWatcher();
-      this.profileWatcher = db
-        .collection("user_profiles")
-        .where({ openid: this.userOpenId })
-        .watch({
-          onChange: (snapshot) => {
-            const doc = snapshot.docs[0];
-            if (doc) this.applyProfile(doc);
-          },
-          onError: (err) => console.error("[home] profile watch error", err),
-        });
     },
     applyProfile(profile) {
       const height = profile.height ? Number(profile.height).toFixed(0) : "--";

@@ -10,7 +10,7 @@
       ></textarea>
       <button class="btn-primary mt-30" @click="publish">立即发布</button>
     </view>
-    
+
     <view class="card-box" v-for="m in messages" :key="m._id">
       <view class="fs-32 text-dark">{{ m.content }}</view>
       <view class="fs-24 text-light mt-10">{{ formatTime(m.createdAt) }}</view>

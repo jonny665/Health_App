@@ -67,8 +67,12 @@ const addDiet = async () => {
 onShow(load);
 </script>
 <style scoped>
-.text-white { color: #fff; }
-.fs-60 { font-size: 60rpx; }
+.text-white {
+  color: #fff;
+}
+.fs-60 {
+  font-size: 60rpx;
+}
 .input-field {
   height: 88rpx;
   background: #f8f9fb;

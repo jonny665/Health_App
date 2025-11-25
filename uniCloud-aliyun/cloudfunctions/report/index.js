@@ -38,28 +38,42 @@ exports.main = async (event, context) => {
     if (startDate.getTime() > endDate.getTime())
       throw new Error("开始日期不能晚于结束日期");
 
-    let totalDiet = 0;
-    let totalSport = 0;
+    // 限制最大查询范围为 31 天，防止一次性读取过多
+    const dayDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
+    if (dayDiff > 31) {
+      throw new Error("报表生成范围不能超过 31 天");
+    }
+
     const dietCollection = db.collection("diet");
     const sportCollection = db.collection("sport");
-    const cursor = new Date(startDate);
+    const dbCmd = db.command;
 
-    while (cursor.getTime() <= endDate.getTime()) {
-      const dateStr = cursor.toISOString().slice(0, 10);
-      const [dietRes, sportRes] = await Promise.all([
-        dietCollection.where({ clientId, date: dateStr }).get(),
-        sportCollection.where({ clientId, date: dateStr }).get(),
-      ]);
-      totalDiet += (dietRes.data || []).reduce(
-        (sum, item) => sum + Number(item.calories || 0),
-        0
-      );
-      totalSport += (sportRes.data || []).reduce(
-        (sum, item) => sum + Number(item.calories || 0),
-        0
-      );
-      cursor.setUTCDate(cursor.getUTCDate() + 1);
-    }
+    // 使用范围查询一次性获取数据，减少数据库读取次数 (RU)
+    const [dietRes, sportRes] = await Promise.all([
+      dietCollection
+        .where({
+          clientId,
+          date: dbCmd.gte(String(start)).and(dbCmd.lte(String(end))),
+        })
+        .limit(1000)
+        .get(),
+      sportCollection
+        .where({
+          clientId,
+          date: dbCmd.gte(String(start)).and(dbCmd.lte(String(end))),
+        })
+        .limit(1000)
+        .get(),
+    ]);
+
+    const totalDiet = (dietRes.data || []).reduce(
+      (sum, item) => sum + Number(item.calories || 0),
+      0
+    );
+    const totalSport = (sportRes.data || []).reduce(
+      (sum, item) => sum + Number(item.calories || 0),
+      0
+    );
 
     const now = Date.now();
     const reportDoc = {

@@ -10,14 +10,18 @@
       </picker>
       <button class="btn-primary mt-30" @click="generate">生成基础报告</button>
     </view>
-    
+
     <view v-if="report" class="card-box">
       <view class="fs-32 fw-600 text-dark mb-20">基础统计</view>
-      <view class="fs-28 text-dark mt-10">总摄入：{{ report.totalDiet }} kcal</view>
-      <view class="fs-28 text-dark mt-10">总消耗：{{ report.totalSport }} kcal</view>
+      <view class="fs-28 text-dark mt-10"
+        >总摄入：{{ report.totalDiet }} kcal</view
+      >
+      <view class="fs-28 text-dark mt-10"
+        >总消耗：{{ report.totalSport }} kcal</view
+      >
       <button class="btn-primary mt-30" @click="ai">AI 总结</button>
     </view>
-    
+
     <view v-if="aiText" class="card-box">
       <view class="fs-32 fw-600 text-dark mb-20">AI 分析</view>
       <text class="fs-28 text-dark mt-10 lh-17">{{ aiText }}</text>
