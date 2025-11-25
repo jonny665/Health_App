@@ -10,15 +10,22 @@
         />
       </view>
       <view class="info-text">
-        <text class="fs-36 fw-600 text-dark mb-10">{{ userInfo.nickname || '微信用户' }}</text>
-        <text class="fs-24 text-light">ID: {{ userInfo.openid ? userInfo.openid.slice(0, 6) + '...' : '--' }}</text>
+        <text class="fs-36 fw-600 text-dark mb-10">{{
+          userInfo.nickname || "微信用户"
+        }}</text>
+        <text class="fs-24 text-light"
+          >ID:
+          {{
+            userInfo.openid ? userInfo.openid.slice(0, 6) + "..." : "--"
+          }}</text
+        >
       </view>
     </view>
 
     <!-- 健康数据设置表单 -->
     <view class="card-box settings-box">
       <view class="section-title">身体数据设置</view>
-      
+
       <view class="form-item">
         <view class="label">
           <image src="/static/home/height.png" class="icon" mode="aspectFit" />
@@ -76,10 +83,10 @@ export default {
       loading: false,
       userInfo: {},
       form: {
-        height: '',
-        weight: '',
-        calorieTarget: ''
-      }
+        height: "",
+        weight: "",
+        calorieTarget: "",
+      },
     };
   },
   onShow() {
@@ -87,94 +94,93 @@ export default {
   },
   methods: {
     async loadUserProfile() {
-      const cached = uni.getStorageSync('userProfile');
+      const cached = uni.getStorageSync("userProfile");
       if (cached) {
         this.userInfo = cached;
-        this.form.height = cached.height || '';
-        this.form.weight = cached.weight || '';
-        this.form.calorieTarget = cached.calorieTarget || '';
+        this.form.height = cached.height || "";
+        this.form.weight = cached.weight || "";
+        this.form.calorieTarget = cached.calorieTarget || "";
       }
 
       // 从云端拉取最新数据
       if (cached && cached.openid) {
         try {
           const { result } = await uniCloud.callFunction({
-            name: 'profile',
-            data: { openid: cached.openid }
+            name: "profile",
+            data: { openid: cached.openid },
           });
-          
+
           if (result.code === 0 && result.data) {
             const remoteData = result.data;
             // 更新本地缓存的某些字段
             const newProfile = { ...cached, ...remoteData };
-            uni.setStorageSync('userProfile', newProfile);
-            
+            uni.setStorageSync("userProfile", newProfile);
+
             this.userInfo = newProfile;
-            this.form.height = remoteData.height || '';
-            this.form.weight = remoteData.weight || '';
+            this.form.height = remoteData.height || "";
+            this.form.weight = remoteData.weight || "";
             // profile 云函数目前可能没返回 calorieTarget，如果需要显示，得确保 profile 云函数返回它
             // 暂时假设 profile 云函数会返回，或者我们只依赖本地缓存+手动更新
             if (remoteData.calorieTarget) {
-                this.form.calorieTarget = remoteData.calorieTarget;
+              this.form.calorieTarget = remoteData.calorieTarget;
             }
           }
         } catch (e) {
-          console.error('同步个人信息失败', e);
+          console.error("同步个人信息失败", e);
         }
       }
     },
     async saveSettings() {
       if (this.loading) return;
-      
+
       const height = Number(this.form.height);
       const weight = Number(this.form.weight);
       const calorieTarget = Number(this.form.calorieTarget);
 
       if (!height || height <= 0 || height > 300) {
-        return uni.showToast({ title: '请输入有效的身高', icon: 'none' });
+        return uni.showToast({ title: "请输入有效的身高", icon: "none" });
       }
       if (!weight || weight <= 0 || weight > 500) {
-        return uni.showToast({ title: '请输入有效的体重', icon: 'none' });
+        return uni.showToast({ title: "请输入有效的体重", icon: "none" });
       }
       if (!calorieTarget || calorieTarget <= 500 || calorieTarget > 10000) {
-        return uni.showToast({ title: '请输入有效的目标卡路里', icon: 'none' });
+        return uni.showToast({ title: "请输入有效的目标卡路里", icon: "none" });
       }
 
       this.loading = true;
       try {
         const { result } = await uniCloud.callFunction({
-          name: 'updateUserHealthData',
+          name: "updateUserHealthData",
           data: {
             openid: this.userInfo.openid,
             height,
             weight,
-            calorieTarget
-          }
+            calorieTarget,
+          },
         });
 
         if (result.code === 0) {
-          uni.showToast({ title: '保存成功', icon: 'success' });
-          
+          uni.showToast({ title: "保存成功", icon: "success" });
+
           // 更新本地缓存
           const newProfile = {
             ...this.userInfo,
             height,
             weight,
-            calorieTarget
+            calorieTarget,
           };
-          uni.setStorageSync('userProfile', newProfile);
+          uni.setStorageSync("userProfile", newProfile);
           this.userInfo = newProfile;
-          
         } else {
-          throw new Error(result.message || '保存失败');
+          throw new Error(result.message || "保存失败");
         }
       } catch (err) {
-        uni.showToast({ title: err.message || '保存失败', icon: 'none' });
+        uni.showToast({ title: err.message || "保存失败", icon: "none" });
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -190,7 +196,7 @@ export default {
     overflow: hidden;
     margin-right: 30rpx;
     border: 4rpx solid #e6f7f0;
-    
+
     .avatar {
       width: 100%;
       height: 100%;
@@ -219,13 +225,13 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 20rpx;
-    
+
     .icon {
       width: 40rpx;
       height: 40rpx;
       margin-right: 16rpx;
     }
-    
+
     text {
       font-size: 28rpx;
       color: #666;
@@ -252,7 +258,7 @@ export default {
 .tips {
   margin-top: 30rpx;
   text-align: center;
-  
+
   text {
     font-size: 24rpx;
     color: #999;

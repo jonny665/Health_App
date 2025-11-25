@@ -1,61 +1,74 @@
 <template>
-  <view class="pd20 column gap">
-    <view class="card" v-if="!groupId">
-      <input class="input" v-model="form.nickname" placeholder="昵称" />
+  <view class="app-container">
+    <!-- 创建小组 -->
+    <view class="card-box" v-if="!groupId">
+      <view class="fs-32 fw-600 text-dark mb-20">创建小组</view>
+      <input class="input-field mb-20" v-model="form.nickname" placeholder="昵称" />
       <textarea
-        class="input"
+        class="input-area mb-20"
         v-model="form.info"
         placeholder="简介/目标"
       ></textarea>
-      <button class="mgt20" @click="create">创建小组</button>
-    </view>
-    <view class="card" v-else>
-      <view class="fs32 fwb">当前小组 #{{ groupId }}</view>
-      <button class="mgt20" @click="loadMembers">刷新成员</button>
-      <view class="mgt10 c9" v-if="members.length"
-        >共 {{ members.length }} 人</view
-      >
-      <view class="mgt20" v-for="u in members" :key="u._id">
-        <view class="fs32">{{ u.nickname }}</view>
-        <view class="c9 fs24">{{ u.isLeader ? "组长" : "成员" }}</view>
-      </view>
+      <button class="btn-primary" @click="create">创建小组</button>
     </view>
 
-    <view class="card">
-      <view class="fs32 fwb">我的资料</view>
-      <input class="input" v-model="myProfile.nickname" placeholder="昵称" />
+    <!-- 当前小组 -->
+    <view class="card-box" v-else>
+      <view class="flex-between mb-20">
+        <view class="fs-32 fw-600 text-dark">当前小组 #{{ groupId }}</view>
+        <view class="fs-24 text-light" v-if="members.length">共 {{ members.length }} 人</view>
+      </view>
+      
+      <view class="member-list">
+        <view class="member-item flex-between mb-10" v-for="u in members" :key="u._id">
+          <view class="fs-32 text-dark">{{ u.nickname }}</view>
+          <view class="fs-24 text-primary bg-light-primary px-2 py-1 rounded">{{ u.isLeader ? "组长" : "成员" }}</view>
+        </view>
+      </view>
+      
+      <button class="btn-primary mt-30" @click="loadMembers">刷新成员</button>
+    </view>
+
+    <!-- 我的资料 -->
+    <view class="card-box">
+      <view class="fs-32 fw-600 text-dark mb-20">我的资料</view>
+      <input class="input-field mb-20" v-model="myProfile.nickname" placeholder="昵称" />
       <textarea
-        class="input"
+        class="input-area mb-20"
         v-model="myProfile.info"
         placeholder="个人简介"
       ></textarea>
       <button
-        class="mgt20"
+        class="btn-primary"
         :disabled="!groupId || profileSaving"
         @click="saveProfile"
       >
         {{ profileSaving ? "保存中..." : "保存资料" }}
       </button>
-      <view class="tips" v-if="!groupId">加入或创建小组后可保存</view>
+      <view class="fs-24 text-light mt-20 text-center" v-if="!groupId">加入或创建小组后可保存</view>
     </view>
 
-    <view class="card">
-      <view class="fs32 fwb">加入已有小组</view>
-      <input class="input" v-model="joinId" placeholder="输入小组ID" />
-      <input class="input" v-model="joinNickname" placeholder="你的昵称" />
-      <button class="mgt20" @click="join">加入</button>
+    <!-- 加入小组 -->
+    <view class="card-box">
+      <view class="fs-32 fw-600 text-dark mb-20">加入已有小组</view>
+      <input class="input-field mb-20" v-model="joinId" placeholder="输入小组ID" />
+      <input class="input-field mb-20" v-model="joinNickname" placeholder="你的昵称" />
+      <button class="btn-primary" @click="join">加入</button>
     </view>
 
-    <view class="card">
-      <view class="fs32 fwb">可加入小组</view>
-      <button class="mgt20" @click="list">获取可加入小组列表</button>
+    <!-- 可加入列表 -->
+    <view class="card-box">
+      <view class="fs-32 fw-600 text-dark mb-20">可加入小组</view>
+      <button class="btn-primary mb-20" @click="list">获取可加入小组列表</button>
       <view
-        class="mt-2 link"
+        class="group-item"
         v-for="g in groups"
         :key="g.groupId"
         @click="quickJoin(g.groupId)"
       >
-        #{{ g.groupId }} {{ g.leader }} ({{ g.member || 1 }}人)
+        <text class="text-primary fw-600">#{{ g.groupId }}</text> 
+        <text class="ml-2 text-dark">{{ g.leader }}</text>
+        <text class="ml-2 text-gray">({{ g.member || 1 }}人)</text>
       </view>
     </view>
   </view>
@@ -204,4 +217,34 @@ button:disabled {
   font-size: 24rpx;
   margin-top: 8rpx;
 }
+.input-field {
+  height: 88rpx;
+  background: #f8f9fb;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.input-area {
+  width: 100%;
+  min-height: 120rpx;
+  background: #f8f9fb;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+.bg-light-primary {
+  background-color: rgba(14, 181, 132, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+.group-item {
+  padding: 20rpx;
+  background: #f8f9fb;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+}
+.ml-2 { margin-left: 16rpx; }
 </style>

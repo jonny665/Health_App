@@ -1,24 +1,26 @@
 <template>
-  <view class="pd20 column gap">
-    <view class="card">
-      <view class="fs36 fwb">报告生成</view>
+  <view class="app-container">
+    <view class="card-box">
+      <view class="fs-36 fw-600 text-dark mb-20">报告生成</view>
       <picker mode="date" @change="onStart" :value="start">
-        <view class="mgt10">开始日期：{{ start || "请选择" }}</view>
+        <view class="picker-item mt-10">开始日期：{{ start || "请选择" }}</view>
       </picker>
       <picker mode="date" @change="onEnd" :value="end">
-        <view class="mgt10">结束日期：{{ end || "请选择" }}</view>
+        <view class="picker-item mt-10">结束日期：{{ end || "请选择" }}</view>
       </picker>
-      <button class="mgt20" @click="generate">生成基础报告</button>
+      <button class="btn-primary mt-30" @click="generate">生成基础报告</button>
     </view>
-    <view v-if="report" class="card">
-      <view class="fs32 fwb">基础统计</view>
-      <view class="mgt10">总摄入：{{ report.totalDiet }} kcal</view>
-      <view class="mgt10">总消耗：{{ report.totalSport }} kcal</view>
-      <button class="mgt20" @click="ai">AI 总结</button>
+    
+    <view v-if="report" class="card-box">
+      <view class="fs-32 fw-600 text-dark mb-20">基础统计</view>
+      <view class="fs-28 text-dark mt-10">总摄入：{{ report.totalDiet }} kcal</view>
+      <view class="fs-28 text-dark mt-10">总消耗：{{ report.totalSport }} kcal</view>
+      <button class="btn-primary mt-30" @click="ai">AI 总结</button>
     </view>
-    <view v-if="aiText" class="card">
-      <view class="fs32 fwb">AI 分析</view>
-      <text class="mgt10 lh17">{{ aiText }}</text>
+    
+    <view v-if="aiText" class="card-box">
+      <view class="fs-32 fw-600 text-dark mb-20">AI 分析</view>
+      <text class="fs-28 text-dark mt-10 lh-17">{{ aiText }}</text>
     </view>
   </view>
 </template>
