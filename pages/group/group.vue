@@ -3,7 +3,11 @@
     <!-- 创建小组 -->
     <view class="card-box" v-if="!groupId">
       <view class="fs-32 fw-600 text-dark mb-20">创建小组</view>
-      <input class="input-field mb-20" v-model="form.nickname" placeholder="昵称" />
+      <input
+        class="input-field mb-20"
+        v-model="form.nickname"
+        placeholder="昵称"
+      />
       <textarea
         class="input-area mb-20"
         v-model="form.info"
@@ -16,23 +20,35 @@
     <view class="card-box" v-else>
       <view class="flex-between mb-20">
         <view class="fs-32 fw-600 text-dark">当前小组 #{{ groupId }}</view>
-        <view class="fs-24 text-light" v-if="members.length">共 {{ members.length }} 人</view>
+        <view class="fs-24 text-light" v-if="members.length"
+          >共 {{ members.length }} 人</view
+        >
       </view>
-      
+
       <view class="member-list">
-        <view class="member-item flex-between mb-10" v-for="u in members" :key="u._id">
+        <view
+          class="member-item flex-between mb-10"
+          v-for="u in members"
+          :key="u._id"
+        >
           <view class="fs-32 text-dark">{{ u.nickname }}</view>
-          <view class="fs-24 text-primary bg-light-primary px-2 py-1 rounded">{{ u.isLeader ? "组长" : "成员" }}</view>
+          <view class="fs-24 text-primary bg-light-primary px-2 py-1 rounded">{{
+            u.isLeader ? "组长" : "成员"
+          }}</view>
         </view>
       </view>
-      
+
       <button class="btn-primary mt-30" @click="loadMembers">刷新成员</button>
     </view>
 
     <!-- 我的资料 -->
     <view class="card-box">
       <view class="fs-32 fw-600 text-dark mb-20">我的资料</view>
-      <input class="input-field mb-20" v-model="myProfile.nickname" placeholder="昵称" />
+      <input
+        class="input-field mb-20"
+        v-model="myProfile.nickname"
+        placeholder="昵称"
+      />
       <textarea
         class="input-area mb-20"
         v-model="myProfile.info"
@@ -45,28 +61,40 @@
       >
         {{ profileSaving ? "保存中..." : "保存资料" }}
       </button>
-      <view class="fs-24 text-light mt-20 text-center" v-if="!groupId">加入或创建小组后可保存</view>
+      <view class="fs-24 text-light mt-20 text-center" v-if="!groupId"
+        >加入或创建小组后可保存</view
+      >
     </view>
 
     <!-- 加入小组 -->
     <view class="card-box">
       <view class="fs-32 fw-600 text-dark mb-20">加入已有小组</view>
-      <input class="input-field mb-20" v-model="joinId" placeholder="输入小组ID" />
-      <input class="input-field mb-20" v-model="joinNickname" placeholder="你的昵称" />
+      <input
+        class="input-field mb-20"
+        v-model="joinId"
+        placeholder="输入小组ID"
+      />
+      <input
+        class="input-field mb-20"
+        v-model="joinNickname"
+        placeholder="你的昵称"
+      />
       <button class="btn-primary" @click="join">加入</button>
     </view>
 
     <!-- 可加入列表 -->
     <view class="card-box">
       <view class="fs-32 fw-600 text-dark mb-20">可加入小组</view>
-      <button class="btn-primary mb-20" @click="list">获取可加入小组列表</button>
+      <button class="btn-primary mb-20" @click="list">
+        获取可加入小组列表
+      </button>
       <view
         class="group-item"
         v-for="g in groups"
         :key="g.groupId"
         @click="quickJoin(g.groupId)"
       >
-        <text class="text-primary fw-600">#{{ g.groupId }}</text> 
+        <text class="text-primary fw-600">#{{ g.groupId }}</text>
         <text class="ml-2 text-dark">{{ g.leader }}</text>
         <text class="ml-2 text-gray">({{ g.member || 1 }}人)</text>
       </view>
@@ -246,5 +274,7 @@ button:disabled {
   border-radius: 12rpx;
   margin-bottom: 16rpx;
 }
-.ml-2 { margin-left: 16rpx; }
+.ml-2 {
+  margin-left: 16rpx;
+}
 </style>
