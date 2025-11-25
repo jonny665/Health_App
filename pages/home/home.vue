@@ -1,25 +1,29 @@
 <template>
-  <view class="container pd20 column">
-    <view class="box hero-box">
+  <view class="app-container">
+    <view class="card-box hero-box">
       <view class="hero-text">
-        <view class="title">您好，欢迎回来！</view>
-        <view class="subtitle">让我们携手守护您的健康！</view>
+        <view class="fs-40 fw-600">您好，欢迎回来！</view>
+        <view class="fs-30 mt-10" style="opacity: 0.9">让我们携手守护您的健康！</view>
       </view>
-      <image class="hero-illustration" src="/static/home/hospital.png" mode="widthFix" />
+      <image
+        class="hero-illustration"
+        src="/static/home/hospital.png"
+        mode="widthFix"
+      />
     </view>
 
-    <text class="section-tip-1">今日健康概览</text>
+    <view class="fs-32 fw-600 text-dark mb-20 mt-10">今日健康概览</view>
 
-    <view class="box middle-box">
+    <view class="card-box middle-box">
       <swiper class="quick-swiper" circular :indicator-dots="true">
         <swiper-item v-for="(group, gIdx) in cardGroups" :key="gIdx">
           <view class="card-grid">
-            <view class="quick-card" v-for="card in group" :key="card.text">
+            <view class="quick-card" v-for="card in group" :key="card.key">
               <image :src="card.icon" mode="aspectFit" />
-              <text class="card-value">{{ card.value }}</text>
+              <text class="card-value text-primary">{{ card.value }}</text>
               <view class="card-label">
-                <text class="card-title">{{ card.text }}</text>
-                <text class="card-subtitle">{{ card.subText }}</text>
+                <text class="card-title text-dark">{{ card.text }}</text>
+                <text class="card-subtitle text-gray">{{ card.subText }}</text>
               </view>
             </view>
           </view>
@@ -27,9 +31,9 @@
       </swiper>
     </view>
 
-    <text class="section-tip-2">其他功能</text>
+    <view class="fs-32 fw-600 text-dark mb-20 mt-10">其他功能</view>
 
-    <view class="box action-box">
+    <view class="card-box action-box">
       <view class="action-grid">
         <view
           class="action-item"
@@ -38,7 +42,7 @@
           @tap="handleActionClick(item)"
         >
           <image :src="item.icon" mode="aspectFit" />
-          <text>{{ item.text }}</text>
+          <text class="text-dark">{{ item.text }}</text>
         </view>
       </view>
     </view>
@@ -52,36 +56,80 @@ const dbCmd = db.command;
 export default {
   data() {
     return {
-      userOpenId: '',
+      userOpenId: "",
       calorieWatcher: null,
       profileWatcher: null,
       actionShortcuts: [
-        { text: '健康报告', icon: '/static/home/report.png', path: '/pages/report/report' },
-        { text: 'ai分析', icon: '/static/home/ai.png', path: '/pages/ai_analyse/ai_analyse'},
-        { text: '饮食记录', icon: '/static/home/diet_records.png', path: '/pages/diet/diet_records'},
-        { text: '运动记录', icon: '/static/home/sport_records.png', path: '/pages/sport/sport_records'},
-        { text: '健康提醒', icon: '/static/home/remind.png', path: '/pages/remind/remind' },
-        { text: '更多服务', icon: '' }
+        {
+          text: "健康报告",
+          icon: "/static/home/report.png",
+          path: "/pages/report/report",
+        },
+        {
+          text: "ai分析",
+          icon: "/static/home/ai.png",
+          path: "/pages/ai_analyse/ai_analyse",
+        },
+        {
+          text: "饮食记录",
+          icon: "/static/home/diet_records.png",
+          path: "/pages/diet/diet_records",
+        },
+        {
+          text: "运动记录",
+          icon: "/static/home/sport_records.png",
+          path: "/pages/sport/sport_records",
+        },
+        {
+          text: "健康提醒",
+          icon: "/static/home/remind.png",
+          path: "/pages/remind/remind",
+        },
+        { text: "更多服务", icon: "" },
       ],
       cardGroups: [
         [
-          { text: 'calorie', subText: 'mg', value: '0.0', icon: '/static/home/calorie.png' },
-          { text: 'height', subText: 'm', value: '--', icon: '/static/home/height.png' },
-          { text: 'weight', subText: 'kg', value: '--', icon: '/static/home/weight.png' },
-          { text: '', subText: '', value: '', icon: '' }
+          {
+            key: "consumed",
+            text: "已消耗",
+            subText: "kcal",
+            value: "0",
+            icon: "/static/home/calorie.png",
+          },
+          {
+            key: "target",
+            text: "目标",
+            subText: "kcal",
+            value: "--",
+            icon: "/static/home/calorie.png",
+          },
+          {
+            key: "height",
+            text: "身高",
+            subText: "cm",
+            value: "--",
+            icon: "/static/home/height.png",
+          },
+          {
+            key: "weight",
+            text: "体重",
+            subText: "kg",
+            value: "--",
+            icon: "/static/home/weight.png",
+          },
         ],
         [
-          { text: '', subText: '', value: '-', icon: '' },
-          { text: '', subText: '', value: '-', icon: '' },
-          { text: '', subText: '', value: '-', icon: '' },
-          { text: '', subText: '', value: '-', icon: '' }
-        ]
-      ]
+          { text: "", subText: "", value: "-", icon: "" },
+          { text: "", subText: "", value: "-", icon: "" },
+          { text: "", subText: "", value: "-", icon: "" },
+          { text: "", subText: "", value: "-", icon: "" },
+        ],
+      ],
     };
   },
   onLoad() {
-    const cachedProfile = uni.getStorageSync('userProfile');
-    this.userOpenId = cachedProfile?.openid || '';
+    const cachedProfile = uni.getStorageSync("userProfile");
+    this.userOpenId = cachedProfile?.openid || "";
     if (!this.userOpenId) return;
 
     this.fetchTodayCalories();
@@ -89,6 +137,13 @@ export default {
 
     this.fetchUserProfile();
     this.initProfileWatcher();
+  },
+  onShow() {
+    // 每次显示页面时刷新数据，确保从个人中心返回时数据同步
+    if (this.userOpenId) {
+      this.fetchUserProfile();
+      this.fetchTodayCalories();
+    }
   },
   onUnload() {
     this.destroyCalorieWatcher();
@@ -98,35 +153,44 @@ export default {
     async fetchTodayCalories() {
       try {
         const { result } = await uniCloud.callFunction({
-          name: 'calorie',
-          data: { openid: this.userOpenId }
+          name: "calorie",
+          data: { openid: this.userOpenId },
         });
         const total = Number(result?.data?.totalCalories || 0);
-        this.$set(this.cardGroups[0], 0, { ...this.cardGroups[0][0], value: total.toFixed(1) });
+        this.$set(this.cardGroups[0], 0, {
+          ...this.cardGroups[0][0],
+          value: total.toFixed(1),
+        });
       } catch (err) {
-        console.error('[home] calorie fn error', err);
+        console.error("[home] calorie fn error", err);
       }
     },
     initCalorieWatcher() {
       const { startISO, endISO } = this.getTodayRange();
       this.destroyCalorieWatcher();
       this.calorieWatcher = db
-        .collection('daily_calorie_logs')
+        .collection("daily_calorie_logs")
         .where(
           dbCmd.and([
             { userOpenId: this.userOpenId },
             { consumedAt: dbCmd.gte(startISO) },
-            { consumedAt: dbCmd.lt(endISO) }
+            { consumedAt: dbCmd.lt(endISO) },
           ])
         )
         .watch({
           onChange: this.handleCalorieSnapshot,
-          onError: (err) => console.error('[home] calorie watch error', err)
+          onError: (err) => console.error("[home] calorie watch error", err),
         });
     },
     handleCalorieSnapshot(snapshot) {
-      const total = snapshot.docs.reduce((sum, doc) => sum + Number(doc.calories || 0), 0);
-      this.$set(this.cardGroups[0], 0, { ...this.cardGroups[0][0], value: total.toFixed(1) });
+      const total = snapshot.docs.reduce(
+        (sum, doc) => sum + Number(doc.calories || 0),
+        0
+      );
+      this.$set(this.cardGroups[0], 0, {
+        ...this.cardGroups[0][0],
+        value: total.toFixed(1),
+      });
     },
     destroyCalorieWatcher() {
       if (this.calorieWatcher) {
@@ -138,35 +202,49 @@ export default {
       if (!this.userOpenId) return;
       try {
         const { result } = await uniCloud.callFunction({
-          name: 'profile',
-          data: { openid: this.userOpenId }
+          name: "profile",
+          data: { openid: this.userOpenId },
         });
         const profile = result?.data;
         if (profile) this.applyProfile(profile);
       } catch (err) {
-        console.error('[home] profile fn error', err);
+        console.error("[home] profile fn error", err);
       }
     },
     initProfileWatcher() {
       if (!this.userOpenId) return;
       this.destroyProfileWatcher();
       this.profileWatcher = db
-        .collection('user_profiles')
+        .collection("user_profiles")
         .where({ openid: this.userOpenId })
         .watch({
           onChange: (snapshot) => {
             const doc = snapshot.docs[0];
             if (doc) this.applyProfile(doc);
           },
-          onError: (err) => console.error('[home] profile watch error', err)
+          onError: (err) => console.error("[home] profile watch error", err),
         });
     },
     applyProfile(profile) {
-      const height = profile.height ? Number(profile.height).toFixed(2) : '--';
-      const weight = profile.weight ? Number(profile.weight).toFixed(1) : '--';
+      const height = profile.height ? Number(profile.height).toFixed(0) : "--";
+      const weight = profile.weight ? Number(profile.weight).toFixed(1) : "--";
+      const target = profile.calorieTarget ? Number(profile.calorieTarget).toFixed(0) : "--";
 
-      this.$set(this.cardGroups[0], 1, { ...this.cardGroups[0][1], value: height });
-      this.$set(this.cardGroups[0], 2, { ...this.cardGroups[0][2], value: weight });
+      // Index 1: Target
+      this.$set(this.cardGroups[0], 1, {
+        ...this.cardGroups[0][1],
+        value: target,
+      });
+      // Index 2: Height
+      this.$set(this.cardGroups[0], 2, {
+        ...this.cardGroups[0][2],
+        value: height,
+      });
+      // Index 3: Weight
+      this.$set(this.cardGroups[0], 3, {
+        ...this.cardGroups[0][3],
+        value: weight,
+      });
     },
     destroyProfileWatcher() {
       if (this.profileWatcher) {
@@ -176,87 +254,58 @@ export default {
     },
     getTodayRange() {
       const now = new Date();
-      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+      const start = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        0,
+        0,
+        0
+      );
       const end = new Date(start.getTime() + 24 * 60 * 60 * 1000);
-      return { startISO: this.formatReadable(start), endISO: this.formatReadable(end) };
+      return {
+        startISO: this.formatReadable(start),
+        endISO: this.formatReadable(end),
+      };
     },
     formatReadable(date) {
       const pad = (n) => (n < 10 ? `0${n}` : `${n}`);
-      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(
-        date.getHours()
-      )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+        date.getDate()
+      )} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
+        date.getSeconds()
+      )}`;
     },
     handleActionClick(item) {
       if (!item?.path) return;
       uni.navigateTo({ url: item.path });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
-  background: #f4f7fb;
-}
 .hero-box {
   min-height: 200rpx;
-  padding: 32rpx;
-  border-radius: 24rpx;
   background: linear-gradient(135deg, #0eb584, #16c2a3);
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 12rpx 30rpx rgba(15, 23, 42, 0.08);
 }
 .hero-text {
   display: flex;
   flex-direction: column;
-  gap: 12rpx;
 }
 .hero-illustration {
   width: 180rpx;
   height: 180rpx;
 }
-.hero-box .title {
-  font-size: 40rpx;
-  font-weight: 600;
-}
-.hero-box .subtitle {
-  margin-top: 12rpx;
-  font-size: 30rpx;
-  opacity: 0.9;
-}
-.section-tip-1,
-.section-tip-2 {
-  margin: 16rpx 0;
-  font-size: 32rpx;
-  color: #080a0d;
-  font-weight: 600;
-}
-.middle-box,
-.action-box {
-  padding: 32rpx;
-  border-radius: 24rpx;
-  background: #fff;
-  box-shadow: 0 12rpx 30rpx rgba(15, 23, 42, 0.08);
-}
 .middle-box {
   min-height: 480rpx;
 }
 .action-box {
-  min-height: 220rpx;
-}
-.middle-box .title,
-.action-box .title {
-  font-size: 32rpx;
-  font-weight: 600;
-  margin-bottom: 16rpx;
-  color: #0f172a;
+  min-height: auto;
 }
 .quick-swiper {
   height: 540rpx;
@@ -287,7 +336,6 @@ export default {
 .card-value {
   font-size: 30rpx;
   font-weight: 600;
-  color: #0eb584;
 }
 .card-label {
   width: auto;
@@ -298,31 +346,16 @@ export default {
 }
 .card-title,
 .card-subtitle {
-  display: block;       
+  display: block;
   line-height: 1.3;
 }
 .card-title {
   font-size: 30rpx;
-  color: #0f172a;
   font-weight: 600;
 }
 .card-subtitle {
   font-size: 24rpx;
-  color: #64748b;
   margin-top: 4rpx;
-}
-.primary-btn {
-  width: 100%;
-  height: 96rpx;
-  border-radius: 16rpx;
-  background: #0eb584;
-  color: #fff;
-  font-size: 32rpx;
-  font-weight: 600;
-}
-
-.action-box {
-  min-height: auto;
 }
 
 .action-grid {
@@ -350,6 +383,5 @@ export default {
 
 .action-item text {
   font-size: 24rpx;
-  color: #0f172a;
 }
 </style>
