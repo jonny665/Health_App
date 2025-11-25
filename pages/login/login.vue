@@ -8,7 +8,11 @@
       </view>
     </view>
     <view class="action-card">
-      <image class="card-illustration" src="/image/login/2.png" mode="widthFix" />
+      <image
+        class="card-illustration"
+        src="/image/login/2.png"
+        mode="widthFix"
+      />
       <button class="login-btn" :loading="loading" @tap="openLoginMenu">
         微信快捷登录
       </button>
@@ -17,7 +21,7 @@
 </template>
 
 <script>
-import { loginByOpenId } from '@/services/api.js';
+import { loginByOpenId } from "@/services/api.js";
 
 export default {
   data() {
@@ -25,24 +29,24 @@ export default {
       loading: false,
       profileCache: null,
       form: {
-        height: '',
-        weight: '',
-        comment: '',
-        post: '',
+        height: "",
+        weight: "",
+        comment: "",
+        post: "",
         sportRecord: {
-          sportType: '',
+          sportType: "",
           distance: null,
-          duration: null
-        }
-      }
+          duration: null,
+        },
+      },
     };
   },
   methods: {
     openLoginMenu() {
       if (this.loading) return;
       uni.showActionSheet({
-        itemList: ['微信头像授权登录'],
-        success: () => this.doWechatLogin()
+        itemList: ["微信头像授权登录"],
+        success: () => this.doWechatLogin(),
       });
     },
     async doWechatLogin() {
@@ -51,38 +55,44 @@ export default {
       try {
         let userProfile = {};
         try {
-          const profileRes = await uni.getUserProfile({ desc: '用于完善个人资料' });
+          const profileRes = await uni.getUserProfile({
+            desc: "用于完善个人资料",
+          });
           userProfile = profileRes.userInfo || {};
         } catch (err) {
-          console.warn('用户未授权头像昵称', err);
+          console.warn("用户未授权头像昵称", err);
         }
 
-        const loginRes = await uni.login({ provider: 'weixin' });
-        if (!loginRes?.code) throw new Error('无法获取登录凭证');
+        const loginRes = await uni.login({ provider: "weixin" });
+        if (!loginRes?.code) throw new Error("无法获取登录凭证");
+
+        const accountInfo = uni.getAccountInfoSync();
+        const appId = accountInfo.miniProgram.appId;
 
         const { result } = await loginByOpenId({
           code: loginRes.code,
+          appId,
           profile: {
             ...userProfile,
             height: this.form.height ? Number(this.form.height) : null,
             weight: this.form.weight ? Number(this.form.weight) : null,
             comment: this.form.comment,
             post: this.form.post,
-            sportRecord: this.normalizeSportRecordPayload()
-          }
+            sportRecord: this.normalizeSportRecordPayload(),
+          },
         });
 
-        if (result.code !== 0) throw new Error(result.message || '登录失败');
+        if (result.code !== 0) throw new Error(result.message || "登录失败");
 
         const userData = result.data.user;
-        this.profileCache = userData;              // 组件内保存
-        uni.setStorageSync('userProfile', userData); // 本地缓存
-        uni.showToast({ title: '登录成功', icon: 'success' });
+        this.profileCache = userData; // 组件内保存
+        uni.setStorageSync("userProfile", userData); // 本地缓存
+        uni.showToast({ title: "登录成功", icon: "success" });
         setTimeout(() => {
-          uni.reLaunch({ url: '/pages/home/home' });
+          uni.reLaunch({ url: "/pages/home/home" });
         }, 300);
       } catch (error) {
-        uni.showToast({ title: error.message || '登录失败', icon: 'none' });
+        uni.showToast({ title: error.message || "登录失败", icon: "none" });
       } finally {
         this.loading = false;
       }
@@ -93,10 +103,10 @@ export default {
       return {
         sportType,
         distance: Number(distance),
-        duration: Number(duration)
+        duration: Number(duration),
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -116,7 +126,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
 }
 
@@ -164,7 +174,7 @@ export default {
   margin: 80rpx auto 0;
   padding: 40rpx 32rpx;
   border-radius: 24rpx;
-  width: 570rpx; 
+  width: 570rpx;
   height: 550rpx;
   background: #fff;
   box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.25); // 黑色阴影
@@ -194,10 +204,9 @@ export default {
 }
 
 .subtitle {
-    display: block;
-    margin-top: 12rpx;
-    font-size: 26rpx;
-    color: #6e7a9b;
+  display: block;
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #6e7a9b;
 }
-
 </style>
