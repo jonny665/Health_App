@@ -1,24 +1,24 @@
 <template>
-  <view class="pd20 column gap">
-    <view class="card blackCard">
-      <view class="fs36">今日消耗热量</view>
-      <view class="fs60 fwb">{{ total }} kcal</view>
+  <view class="app-container">
+    <view class="card-box bg-dark text-white">
+      <view class="fs-36">今日消耗热量</view>
+      <view class="fs-60 fw-600 mt-10">{{ total }} kcal</view>
     </view>
-    <view class="card">
-      <view class="fs32 fwb">记录今日运动</view>
-      <input class="input" v-model="sport" placeholder="运动项目" />
+    <view class="card-box">
+      <view class="fs-32 fw-600 text-dark mb-20">记录今日运动</view>
+      <input class="input-field mb-20" v-model="sport" placeholder="运动项目" />
       <input
-        class="input"
+        class="input-field mb-20"
         v-model.number="calories"
         type="number"
         placeholder="热量(kcal)"
       />
-      <button class="mgt20" @click="addSport">添加记录</button>
+      <button class="btn-primary" @click="addSport">添加记录</button>
     </view>
-    <view class="card" v-for="item in list" :key="item._id">
-      <view class="fs32 fwb">{{ item.sport }}</view>
-      <view class="mgt10 c6">{{ item.calories }} kcal</view>
-      <view class="c9 fs24">{{ item.date }}</view>
+    <view class="card-box" v-for="item in list" :key="item._id">
+      <view class="fs-32 fw-600 text-dark">{{ item.sport }}</view>
+      <view class="fs-28 text-gray mt-10">{{ item.calories }} kcal</view>
+      <view class="fs-24 text-light mt-10">{{ item.date }}</view>
     </view>
   </view>
 </template>
@@ -67,7 +67,16 @@ const addSport = async () => {
 onShow(load);
 </script>
 <style scoped>
-.column.gap > .card + .card {
-  margin-top: 20rpx;
+.bg-dark { background-color: #1f2f50; }
+.text-white { color: #fff; }
+.fs-60 { font-size: 60rpx; }
+.input-field {
+  height: 88rpx;
+  background: #f8f9fb;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 </style>

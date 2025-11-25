@@ -3,7 +3,9 @@
     <view class="card-box hero-box">
       <view class="hero-text">
         <view class="fs-40 fw-600">您好，欢迎回来！</view>
-        <view class="fs-30 mt-10" style="opacity: 0.9">让我们携手守护您的健康！</view>
+        <view class="fs-30 mt-10" style="opacity: 0.9"
+          >让我们携手守护您的健康！</view
+        >
       </view>
       <image
         class="hero-illustration"
@@ -129,8 +131,11 @@ export default {
   },
   onLoad() {
     const cachedProfile = uni.getStorageSync("userProfile");
-    this.userOpenId = cachedProfile?.openid || "";
-    if (!this.userOpenId) return;
+    if (!cachedProfile || !cachedProfile.openid) {
+      uni.reLaunch({ url: "/pages/login/login" });
+      return;
+    }
+    this.userOpenId = cachedProfile.openid;
 
     this.fetchTodayCalories();
     this.initCalorieWatcher();
@@ -228,7 +233,9 @@ export default {
     applyProfile(profile) {
       const height = profile.height ? Number(profile.height).toFixed(0) : "--";
       const weight = profile.weight ? Number(profile.weight).toFixed(1) : "--";
-      const target = profile.calorieTarget ? Number(profile.calorieTarget).toFixed(0) : "--";
+      const target = profile.calorieTarget
+        ? Number(profile.calorieTarget).toFixed(0)
+        : "--";
 
       // Index 1: Target
       this.$set(this.cardGroups[0], 1, {

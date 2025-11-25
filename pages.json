@@ -51,6 +51,12 @@
       }
     },
     {
+      "path": "pages/group/group",
+      "style": {
+        "navigationBarTitleText": "小组"
+      }
+    },
+    {
       "path": "pages/report/report",
       "style": {
         "navigationBarTitleText": "报告总结"
