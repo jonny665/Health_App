@@ -306,4 +306,69 @@ button {
 button:active {
   opacity: 0.8;
 }
+
+/* Health App Design System */
+/* 颜色 */
+.text-primary { color: #0eb584; }
+.bg-primary { background-color: #0eb584; }
+.text-dark { color: #1f2f50; }
+.text-gray { color: #6e7a9b; }
+.text-light { color: #999; }
+
+/* 布局容器 */
+.app-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* 卡片通用样式 */
+.card-box {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.03);
+}
+
+/* Flex 工具类 (增强版) */
+.flex-row { display: flex; flex-direction: row; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-center { display: flex; justify-content: center; align-items: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-start { display: flex; justify-content: flex-start; align-items: center; }
+.flex-end { display: flex; justify-content: flex-end; align-items: center; }
+
+/* 字体工具类 */
+.fw-600 { font-weight: 600; }
+.fs-24 { font-size: 24rpx; }
+.fs-28 { font-size: 28rpx; }
+.fs-32 { font-size: 32rpx; }
+.fs-36 { font-size: 36rpx; }
+.fs-40 { font-size: 40rpx; }
+
+/* 按钮 */
+.btn-primary {
+  background: #0eb584;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-hover { opacity: 0.9; }
+
+/* 间距 */
+.mt-10 { margin-top: 10rpx; }
+.mt-20 { margin-top: 20rpx; }
+.mt-30 { margin-top: 30rpx; }
+.mb-10 { margin-bottom: 10rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-30 { margin-bottom: 30rpx; }
+.mr-10 { margin-right: 10rpx; }
+.mr-20 { margin-right: 20rpx; }
 </style>

@@ -15,6 +15,7 @@ exports.main = async (event = {}) => {
     data: {
       height: doc.height ?? null,
       weight: doc.weight ?? null,
+      calorieTarget: doc.calorieTarget ?? null,
       updatedAt: doc.updatedAt ?? ''
     }
   };
