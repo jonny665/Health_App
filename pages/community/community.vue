@@ -1,19 +1,18 @@
 <template>
-  <view class="app-container">
-    <view class="card-box">
-      <view class="fs-32 fw-600 text-dark mb-20">发布你的健康留言</view>
+  <view class="pd20 column gap">
+    <view class="card">
+      <view class="fs32 fwb">发布你的健康留言</view>
       <textarea
-        class="input-area"
+        class="input"
         v-model="content"
         placeholder="说点什么..."
         auto-height
       ></textarea>
-      <button class="btn-primary mt-30" @click="publish">立即发布</button>
+      <button class="mgt20" @click="publish">立即发布</button>
     </view>
-
-    <view class="card-box" v-for="m in messages" :key="m._id">
-      <view class="fs-32 text-dark">{{ m.content }}</view>
-      <view class="fs-24 text-light mt-10">{{ formatTime(m.createdAt) }}</view>
+    <view class="card" v-for="m in messages" :key="m._id">
+      <view class="fs32">{{ m.content }}</view>
+      <view class="c9 fs24 mgt10">{{ formatTime(m.createdAt) }}</view>
     </view>
   </view>
 </template>
@@ -59,13 +58,12 @@ const formatTime = (ts) => {
 onShow(load);
 </script>
 <style scoped>
-.input-area {
+.column.gap > .card + .card {
+  margin-top: 20rpx;
+}
+
+textarea {
   width: 100%;
   min-height: 120rpx;
-  background: #f8f9fb;
-  padding: 20rpx;
-  border-radius: 12rpx;
-  font-size: 28rpx;
-  box-sizing: border-box;
 }
 </style>

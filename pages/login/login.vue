@@ -41,12 +41,6 @@ export default {
       },
     };
   },
-  onLoad() {
-    const cachedProfile = uni.getStorageSync("userProfile");
-    if (cachedProfile && cachedProfile.openid) {
-      uni.reLaunch({ url: "/pages/home/home" });
-    }
-  },
   methods: {
     openLoginMenu() {
       if (this.loading) return;

@@ -49,8 +49,8 @@
         "properties": {
           "userOpenId": { "bsonType": "string", "description": "关联 user_profiles.openid" },
           "foodId": { "bsonType": "string", "description": "关联 food_calorie_reference.foodId" },
-          "quantity": { "bsonType": "double", "minimum": 0, "description": "食物数量/份数（单位：100g）" },
-          "calories": { "bsonType": "double", "minimum": 0, "description": "本次消耗卡路里（根据数量计算）" },
+          "quantity": { "bsonType": "double", "minimum": 0, "description": "食物重量（单位：g）" },
+          "calories": { "bsonType": "double", "minimum": 0, "description": "本次消耗卡路里" },
           "consumedAt": { "bsonType": "string", "description": "ISO8601 人类可读时间" },
           "note": { "bsonType": "string", "maxLength": 200 }
         }
@@ -71,11 +71,13 @@
           "name": { "bsonType": "string", "maxLength": 100 },
           "calories": { "bsonType": "double", "minimum": 0, "description": "每单位卡路里" },
           "unit": { "bsonType": "string", "maxLength": 20, "description": "单位（克/份等）" },
+          "category": { "bsonType": "string", "maxLength": 50, "description": "食物种类（水果/蔬菜等）" },
           "updatedAt": { "bsonType": "string", "description": "ISO8601 人类可读时间" }
         }
       },
       "indexes": [
-        { "name": "uk_food_id", "key": { "foodId": 1 }, "unique": true }
+        { "name": "uk_food_id", "key": { "foodId": 1 }, "unique": true },
+        { "name": "idx_food_category", "key": { "category": 1, "foodId": 1 } }
       ]
     }
     {

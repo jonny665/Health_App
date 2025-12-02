@@ -1,0 +1,21 @@
+[
+  {
+    "IndexName": "uk_food_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        { "Name": "foodId", "Direction": "1", "Type": "varchar" }
+      ],
+      "MgoIsUnique": true
+    }
+  },
+  {
+    "IndexName": "idx_food_category",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        { "Name": "category", "Direction": "1", "Type": "varchar" },
+        { "Name": "foodId", "Direction": "1", "Type": "varchar" }
+      ],
+      "MgoIsUnique": false
+    }
+  }
+]

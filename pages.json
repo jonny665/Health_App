@@ -6,11 +6,10 @@
         "navigationBarTitleText": "健康监控"
       }
     },
-    {
-      "path": "pages/ai_analyse/ai_analyse",
-      "style": {
-        "navigationBarTitleText": "AI分析"
-      }
+    { 
+      "path": "pages/ai_analyse/ai_analyse", 
+      "style": { 
+        "navigationBarTitleText": "AI分析" } 
     },
     {
       "path": "pages/login/login",
@@ -49,12 +48,6 @@
       "path": "pages/community/community",
       "style": {
         "navigationBarTitleText": "社区"
-      }
-    },
-    {
-      "path": "pages/group/group",
-      "style": {
-        "navigationBarTitleText": "小组"
       }
     },
     {
@@ -121,9 +114,9 @@
     ]
   },
   "globalStyle": {
-    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#0EB584",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "健康监控",
-    "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
   "uniIdRouter": {}
